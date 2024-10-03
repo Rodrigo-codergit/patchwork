@@ -5,6 +5,7 @@ from io import BytesIO
 from telegram import Update
 from telegram.ext import Application, CommandHandler, MessageHandler, filters, ConversationHandler
 import maritalk
+import matplotlib.pyplot as plt
 
 # Definindo os estados da conversa como constantes
 ASKING_DATA_CLEANING = 1
@@ -54,9 +55,9 @@ async def handle_data_cleaning(update: Update, context) -> int:
         # Exemplo: resposta_da_IA = chamada_para_IA(user_input)
         # Vamos simular a resposta da IA com um exemplo simples:
         resposta_da_IA = """
-            df.dropna(inplace=True)
-            print("Valores nulos removidos")
-            """
+df.dropna(inplace=True)
+print("Valores nulos removidos")
+"""
         # Executa o código gerado pela IA
         try:
             exec(resposta_da_IA, globals(), locals())
@@ -87,10 +88,9 @@ async def handle_analysis(update: Update, context) -> int:
         # Exemplo: resposta_da_IA = chamada_para_IA(user_input)
         # Vamos simular a resposta da IA com um exemplo simples:
         resposta_da_IA = """
-            import matplotlib.pyplot as plt
-            df['coluna_exemplo'].value_counts().plot(kind='bar')
-            plt.show()
-            """
+df['Estado'].value_counts().plot(kind='bar')
+plt.show()
+"""
         # Executa o código gerado pela IA
         try:
             exec(resposta_da_IA, globals(), locals())
@@ -120,7 +120,7 @@ def main():
     KEY = os.getenv('MARITACA_KEY')
     
     # Criando a aplicação
-    application = Application.builder().token(TOKEN).httpx_client(httpx.AsyncClient()).build()
+    application = Application.builder().token(TOKEN).connect_timeout(20).build()
 
     # Configurando o ConversationHandler
     conv_handler = ConversationHandler(
